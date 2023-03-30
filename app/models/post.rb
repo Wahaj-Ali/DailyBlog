@@ -4,6 +4,10 @@ class Post < ApplicationRecord
   has_many :likes
   after_save :update_author_posts_counter
 
+  validates :Title, :presence: true, length: { maximum: 250 }
+  validate :CommentsCounter, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+
+
   def get_recent_comments(count = 5)
     comments.order(created_at: :desc).limit(count)
   end
