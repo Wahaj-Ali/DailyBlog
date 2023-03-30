@@ -8,5 +8,4 @@ class Like < ApplicationRecord
   def update_post_likes_counter
     post.update(LikesCounter: Like.where(post_id).count)
   end
-
 end
