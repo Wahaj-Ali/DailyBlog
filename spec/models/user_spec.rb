@@ -27,7 +27,7 @@ RSpec.describe User, type: :model do
     let!(:post2) { Post.create(Title: 'Post 2', Text: 'Post body', author: @user, CommentsCounter: 0, LikesCounter: 0) }
     let!(:post3) { Post.create(Title: 'Post 3', Text: 'Post body', author: @user, CommentsCounter: 0, LikesCounter: 0) }
     let!(:post4) { Post.create(author: @user) }
-  
+
     it 'should return the specified number of posts' do
       expect(@user.recent_posts.count).to eq(3)
       expect(@user.recent_posts).to include(post1, post2, post3)

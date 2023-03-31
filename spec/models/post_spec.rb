@@ -45,12 +45,12 @@ RSpec.describe Post, type: :model do
 
   describe 'recent_comments' do
     let(:post) { @post }
-    let!(:comment1) { Comment.create(author: @user, post: post) }
-    let!(:comment2) { Comment.create(author: @user, post: post) }
-    let!(:comment3) { Comment.create(author: @user, post: post) }
-    let!(:comment4) { Comment.create(author: @user, post: post) }
-    let!(:comment5) { Comment.create(author: @user, post: post) }
-    let!(:comment6) { Comment.create(author: @user, post: post) }
+    let!(:comment1) { Comment.create(author: @user, post:) }
+    let!(:comment2) { Comment.create(author: @user, post:) }
+    let!(:comment3) { Comment.create(author: @user, post:) }
+    let!(:comment4) { Comment.create(author: @user, post:) }
+    let!(:comment5) { Comment.create(author: @user, post:) }
+    let!(:comment6) { Comment.create(author: @user, post:) }
 
     it 'should return the specified number of comments' do
       comment1
@@ -59,7 +59,7 @@ RSpec.describe Post, type: :model do
       comment4
       comment5
       comment6
-    expect(post.recent_comments(5).count).to eq(5)
+      expect(post.recent_comments(5).count).to eq(5)
+    end
   end
-end
 end
