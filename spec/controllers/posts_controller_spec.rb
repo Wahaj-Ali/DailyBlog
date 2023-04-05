@@ -26,7 +26,7 @@ RSpec.describe PostsController, type: :request do
 
     it 'renders the correct template' do
       get user_post_url(1, 3)
-      expect(response).to render_template('show')
+      expect(response).to render_template(:show)
     end
 
     it 'includes correct placeholder text' do
