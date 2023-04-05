@@ -1,8 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe '/users', type: :request do
-  # let!(:user) { User.create(name: 'Wahaj', photo: 'https://unsplash.com/photos/F_-0BxGuVvo', bio: 'Student.') }
-  # let!(:post) { Post.create(author: user, Title: 'My First Post', Text: 'Lorem ipsum') }
+RSpec.describe UsersController, type: :request do
   describe 'GET #index' do
     it 'returns http success' do
       get users_path
@@ -22,6 +20,28 @@ RSpec.describe '/users', type: :request do
     it 'includes correct placeholder text in the response body' do
       get users_url
       expect(response.body).to include('Here are all the users:')
+    end
+  end
+
+  describe 'GET #index' do
+    it 'returns http success' do
+      get users_url(1)
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'returns correct response status' do
+      get users_url(1)
+      expect(response).to be_successful
+    end
+
+    it 'renders the index template' do
+      get user_url(1)
+      expect(response).to render_template(:show)
+    end
+
+    it 'includes correct placeholder text in the response body' do
+      get user_url(2)
+      expect(response.body).to include('<h1>Here are the details for user:</h1>')
     end
   end
 end
