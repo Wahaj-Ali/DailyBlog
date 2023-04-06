@@ -1,65 +1,98 @@
 require 'rails_helper'
-
 RSpec.describe Post, type: :model do
-  before do
-    @user = User.create(name: 'John Doe', photo: 'live to photo', bio: 'live to bio', posts_counter: 0)
-    @post = Post.create(Title: 'My post', Text: 'Post body', author: @user, CommentsCounter: 0, LikesCounter: 0)
-  end
+  let(:author) { User.create(name: 'Alice') }
+  let(:post) { Post.create(title: 'Post title', text: 'Post body', author:) }
+  let(:comment1) { Comment.create(author:, post:, text: 'Comment body 1') }
+  let(:comment2) { Comment.create(author:, post:, text: 'Comment body 2') }
+  let(:like1) { Like.create(author:, post:) }
+  let(:like2) { Like.create(author:, post:) }
 
   describe 'validations' do
-    it 'should require a Title' do
-      post = Post.new(Text: 'Post body', author: @user)
-      expect(post.valid?).to eq(false)
-      expect(post.errors[:Title].any?).to eq(true)
-    end
-
-    it 'should require a non-empty Title' do
-      post = Post.new(Title: '', Text: 'Post body', author: @user)
-      expect(post.valid?).to eq(false)
-      expect(post.errors[:Title].any?).to eq(true)
-    end
-
-    it 'should allow valid attributes' do
-      post = Post.new(Title: 'My post', Text: 'Post body', author: @user, CommentsCounter: 0, LikesCounter: 0)
-      expect(post.valid?).to eq(true)
-    end
-
-    it 'should validate the CommentsCounter attribute' do
-      post = Post.new(Title: 'My post', Text: 'Post body', author: @user, CommentsCounter: -1, LikesCounter: 0)
-      expect(post.valid?).to eq(false)
-      expect(post.errors[:CommentsCounter].any?).to eq(true)
-    end
-
-    it 'should validate the LikesCounter attribute' do
-      post = Post.new(Title: 'My post', Text: 'Post body', author: @user, CommentsCounter: 0, LikesCounter: -1)
-      expect(post.valid?).to eq(false)
-      expect(post.errors[:LikesCounter].any?).to eq(true)
-    end
-
-    it 'does not allow title to exceed maximum length' do
-      post = Post.new(Title: 'a' * 251, Text: 'Post body', author: @user, CommentsCounter: 0, LikesCounter: 0)
+    it 'validates presence of name' do
+      post = Post.new(comments_counter: 0, likes_counter: 0)
       expect(post).not_to be_valid
-      expect(post.errors[:Title]).to include('is too long (maximum is 250 characters)')
+      expect(post.errors[:title]).to include("can't be blank")
+    end
+
+    it 'validates length of title' do
+      post.title = 'a' * 251
+      expect(post).not_to be_valid
+
+      post.title = 'valid title'
+      expect(post).to be_valid
+    end
+
+    it 'validates numericality of comments_counter' do
+      post.likes_counter = 0
+      post.comments_counter = 'not a number'
+      expect(post).not_to be_valid
+      expect(post.errors[:comments_counter]).to include('is not a number')
+
+      post.comments_counter = -1
+      expect(post).not_to be_valid
+      expect(post.errors[:comments_counter]).to include('must be greater than or equal to 0')
+
+      post.comments_counter = 0
+      expect(post).to be_valid
+    end
+
+    it 'validates numericality of likes_counter' do
+      post.comments_counter = 0
+      post.likes_counter = 'not a number'
+      expect(post).not_to be_valid
+      expect(post.errors[:likes_counter]).to include('is not a number')
+
+      post.likes_counter = -1
+      expect(post).not_to be_valid
+      expect(post.errors[:likes_counter]).to include('must be greater than or equal to 0')
+
+      post.likes_counter = 0
+      expect(post).to be_valid
     end
   end
 
-  describe 'recent_comments' do
-    let(:post) { @post }
-    let!(:comment1) { Comment.create(author: @user, post:) }
-    let!(:comment2) { Comment.create(author: @user, post:) }
-    let!(:comment3) { Comment.create(author: @user, post:) }
-    let!(:comment4) { Comment.create(author: @user, post:) }
-    let!(:comment5) { Comment.create(author: @user, post:) }
-    let!(:comment6) { Comment.create(author: @user, post:) }
+  describe '#comments_counter' do
+    it 'returns the number of comments' do
+      expect(post.comments_counter).to eq(0)
+      post.comments << comment1
+      expect(post.comments_counter).to eq(1)
+      post.comments << comment2
+      expect(post.comments_counter).to eq(2)
+    end
+  end
 
-    it 'should return the specified number of comments' do
-      comment1
-      comment2
-      comment3
-      comment4
-      comment5
-      comment6
-      expect(post.recent_comments(5).count).to eq(5)
+  describe '#likes_counter' do
+    it 'returns the number of likes' do
+      expect(post.likes_counter).to eq(0)
+      post.likes << like1
+      expect(post.likes_counter).to eq(1)
+      post.likes << like2
+      expect(post.likes_counter).to eq(2)
+    end
+  end
+
+  describe '#add_comment' do
+    it 'adds a comment to the post' do
+      post.add_comment(comment1)
+      expect(post.comments).to include(comment1)
+      expect(post.comments_counter).to eq(1)
+    end
+  end
+
+  describe '#get_recent_comments' do
+    it 'returns the most recent comments up to the given count' do
+      post.comments << comment1
+      post.comments << comment2
+      expect(post.get_recent_comments(1)).to eq([comment2])
+      expect(post.get_recent_comments(2)).to eq([comment2, comment1])
+    end
+  end
+
+  describe '#update_author_posts_counter' do
+    context 'when a post is saved' do
+      it 'updates the posts counter of the associated author' do
+        expect { post.save }.to change { author.reload.posts_counter }.by(1)
+      end
     end
   end
 end

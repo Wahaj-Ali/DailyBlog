@@ -1,1 +1,17 @@
-<h1>Here are the posts for user:</h1>
+<div class="container">
+	<%= render @user %>
+	<ul>
+		<% @posts.each do |post| %>
+			<li class="item">
+				<%= render post %>
+				<ul class="bio">
+					<% post.recent_comments.each do |comment| %>
+            <li>
+              <%= content_tag :span, "#{comment.author.name} : #{comment.Text}" %>
+            </li>
+						<% end %>
+				</ul>
+			</li>
+		<% end %>
+	</ul>
+</div>

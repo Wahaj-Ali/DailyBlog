@@ -1,23 +1,25 @@
 require 'rails_helper'
 
-RSpec.describe Comment, type: :model do
-  before do
-    @user = User.create(name: 'John Doe', photo: 'live to photo', bio: 'live to bio', posts_counter: 0)
-    @post = Post.create(Title: 'My post', Text: 'Post body', author: @user, CommentsCounter: 0, LikesCounter: 0)
-  end
 
-  describe 'update_post_comments_counter' do
-    it 'should update the CommentsCounter attribute of the associated post' do
-      expect(@post.CommentsCounter).to eq(0)
-      Comment.create(author: @user, post: @post)
-      expect(@post.CommentsCounter).to eq(1)
-      Comment.create(author: @user, post: @post)
-      expect(@post.CommentsCounter).to eq(2)
+RSpec.describe Comment, type: :model do
+  let(:user) { User.create(name: 'Alice') }
+  let(:post) { Post.create(title: 'Post', text: 'Post body', author: user) }
+
+  describe 'callbacks' do
+    describe '#update_post_comments_counter' do
+      it 'updates the post comments counter' do
+        @comment = Comment.create(author: user, post:, text: 'Comment body')
+        expect(post.reload.comments_counter).to eq(1)
+      end
     end
   end
 
-  it 'have correct user' do
-    @comment = Comment.create(post: @post, author: @user)
-    expect(@comment.author_id).to eq(@user.id)
+  describe '#update_post_comments_counter' do
+    context 'when a comment is saved' do
+      it 'updates the comments counter of the associated post' do
+        comment = Comment.new(author: user, post:, text: 'Comment body')
+        expect { comment.save }.to change { post.reload.comments_counter }.by(1)
+      end
+    end
   end
 end

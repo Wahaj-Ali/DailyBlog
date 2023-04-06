@@ -1,1 +1,15 @@
-<h1>Here are the details for post:</h1>
+<%= content_tag :div, class: "container" do %>
+  <%= content_tag :div, class: "post-head" do %>
+    <h4><%= content_tag :span, "Post # #{@post.id} by  #{@user.name}" %></h4>
+    <%= content_tag :span, "Comments: #{@post.comments_counter} Likes: #{@post.likes_counter}" %>  
+  <% end %>
+  <h1><%= @post.title %></h1>
+  <%= @post.text %>
+  <ul class="comment">
+    <% @post.comments.each do |comment| %>
+      <li>
+        <%= content_tag :span, "#{comment.author.name} : #{comment.text}" %>
+      </li>
+    <% end %>
+  </ul>
+  <% end %>
