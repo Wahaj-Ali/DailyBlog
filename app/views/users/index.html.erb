@@ -1,1 +1,8 @@
-<h1>Here are all the users:</h1>
+  <section class="users-container">
+    <% @users.each do |user| %>
+      <%= link_to user_path(user) do %>
+        <%= render user %>
+      <% end %>
+    <% end %>
+  </section>
+
