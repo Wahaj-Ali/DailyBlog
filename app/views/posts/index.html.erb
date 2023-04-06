@@ -7,7 +7,7 @@
 				<ul class="bio">
 					<% post.recent_comments.each do |comment| %>
             <li>
-              <%= content_tag :span, "#{comment.author.name} : #{comment.Text}" %>
+              <%= content_tag :span, "#{comment.author.name} : #{comment.text}" %>
             </li>
 						<% end %>
 				</ul>
