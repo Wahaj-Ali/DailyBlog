@@ -5,6 +5,13 @@
   <% end %>
   <h1><%= @post.title %></h1>
   <%= @post.text %>
+
+  <div>
+      <%= form_with model: @like, url:  user_post_likes_path(@user, @post) do |form|%>
+          <%= form.submit 'Like post', class: 'submit' %>
+        <%end%>
+    </div>
+
   <ul class="comment">
     <% @post.comments.each do |comment| %>
       <li>
@@ -12,4 +19,10 @@
       </li>
     <% end %>
   </ul>
+
+  <button class="see-all-post d-flex border">
+    <%= link_to "Create new comment", new_user_post_comment_path(@user, @post) %>
+</button>
   <% end %>
+
+  

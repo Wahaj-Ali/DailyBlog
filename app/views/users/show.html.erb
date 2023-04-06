@@ -14,4 +14,7 @@
   </ul>
 
   <button><%= link_to "See all posts", user_posts_path(@user) %></button>
+   <button class="see-all-post d-flex border">
+    <%= link_to "Create post", new_user_post_path(@user) %>
+  </button>
 </div>
