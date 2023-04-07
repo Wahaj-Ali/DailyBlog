@@ -5,13 +5,7 @@
   <% end %>
   <h1><%= @post.title %></h1>
   <%= @post.text %>
-
-  <div>
-      <%= form_with model: @like, url:  user_post_likes_path(@user, @post) do |form|%>
-          <%= form.submit 'Like post', class: 'submit' %>
-        <%end%>
-    </div>
-
+  <%= render "likes/counter" %>
   <ul class="comment">
     <% @post.comments.each do |comment| %>
       <li>

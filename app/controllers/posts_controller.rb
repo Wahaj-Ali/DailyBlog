@@ -11,7 +11,7 @@ class PostsController < ApplicationController
     @likes = @post.likes
   end
 
-  def new 
+  def new
     @user = current_user
     @post = Post.new
   end
