@@ -83,7 +83,7 @@ RSpec.describe Post, type: :model do
     it 'returns the most recent comments up to the given count' do
       post.comments << comment1
       post.comments << comment2
-      expect(post.recent_comments().take(2)).to eq([comment2, comment1])
+      expect(post.recent_comments.take(2)).to eq([comment2, comment1])
     end
   end
 

@@ -32,7 +32,6 @@ RSpec.describe 'User show', type: :feature do
     expect(page).to have_content(@post3.title)
   end
 
-
   it 'I can see the button that lets me view all the posts' do
     expect(page).to have_content('See all posts')
   end
@@ -41,7 +40,6 @@ RSpec.describe 'User show', type: :feature do
     click_link @post1.id
     expect(page).to have_current_path(user_post_path(@user1, @post1))
   end
-
 
   it 'Redirect  all posts page when clicked See all posts' do
     click_link 'See all posts'
