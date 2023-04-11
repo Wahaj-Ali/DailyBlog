@@ -1,11 +1,11 @@
 <div class="container">
 	<%= render @user %>
 	<ul>
-		<% @posts.each do |post| %>
+		<% @posts.includes(comments:[:author]).each do |post| %>
 			<li class="item">
 				<%= render post %>
 				<ul class="bio">
-					<% post.recent_comments.each do |comment| %>
+					<% post.comments.each do |comment| %>
             <li>
               <%= content_tag :span, "#{comment.author.name} : #{comment.text}" %>
             </li>
