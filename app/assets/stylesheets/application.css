@@ -184,3 +184,8 @@ nav ul {
 #remem {
   flex-direction: row;
 }
+
+.actions, .field, .field input, .actions input {
+  width: 100%;
+}
+
