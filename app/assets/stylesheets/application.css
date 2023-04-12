@@ -169,6 +169,13 @@ nav ul {
   justify-content: center;
 }
 
+.actions,
+.field,
+.field input,
+.actions input {
+  width: 100%;
+}
+
 .new_user {
   display: flex;
   flex-direction: column;
@@ -184,8 +191,3 @@ nav ul {
 #remem {
   flex-direction: row;
 }
-
-.actions, .field, .field input, .actions input {
-  width: 100%;
-}
-
