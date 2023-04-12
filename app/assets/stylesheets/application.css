@@ -176,6 +176,10 @@ nav ul {
   width: 100%;
 }
 
+.actions {
+  margin-top: 10px;
+}
+
 .new_user {
   display: flex;
   flex-direction: column;
