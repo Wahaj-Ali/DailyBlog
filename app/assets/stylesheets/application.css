@@ -152,12 +152,6 @@ button a {
   justify-content: center;
 }
 
-.new_user {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .reg-link {
   display: flex;
   justify-content: center;
@@ -173,4 +167,20 @@ nav ul {
 .alert {
   display: flex;
   justify-content: center;
+}
+
+.new_user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.new_user .field {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+}
+
+#remem {
+  flex-direction: row;
 }
