@@ -1,7 +1,10 @@
 <%= content_tag :div, class: "container" do %>
   <%= content_tag :div, class: "post-head" do %>
     <h4><%= content_tag :span, "Post # #{@post.id} by  #{@user.name}" %></h4>
-    <%= content_tag :span, "Comments: #{@post.comments_counter} Likes: #{@post.likes_counter}" %>  
+    <%= content_tag :span, "Comments: #{@post.comments_counter} Likes: #{@post.likes_counter}" %> 
+    <% if can? :destroy , @post %>
+    	<%= button_to "Delete Post", user_post_path(current_user, @post), method: :delete, data: { confirm: 'Are you sure?' } %>
+  	<% end %> 
   <% end %>
   <h1><%= @post.title %></h1>
   <%= @post.text %>
@@ -10,13 +13,13 @@
     <% @post.comments.each do |comment| %>
       <li>
         <%= content_tag :span, "#{comment.author.name} : #{comment.text}" %>
+        <% if can? :destroy, comment %>
+          <%= button_to "Delete Comment", user_post_comment_path(comment.author, comment.post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: "delete_comment_btn" %>
+        <% end %>
       </li>
     <% end %>
   </ul>
-
   <button class="see-all-post d-flex border">
     <%= link_to "Create new comment", new_user_post_comment_path(@user, @post) %>
 </button>
   <% end %>
-
-  
