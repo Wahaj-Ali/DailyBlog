@@ -35,6 +35,11 @@ body {
   overflow-y: scroll;
 }
 
+a {
+  text-decoration: none;
+  color: #6365ec;
+}
+
 ul {
   list-style: none;
 
@@ -140,4 +145,53 @@ button {
 button a {
   text-decoration: none;
   color: #f7f2f2;
+}
+
+.login-heading {
+  display: flex;
+  justify-content: center;
+}
+
+.reg-link {
+  display: flex;
+  justify-content: center;
+}
+
+nav ul {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  align-items: center;
+}
+
+.alert {
+  display: flex;
+  justify-content: center;
+}
+
+.actions,
+.field,
+.field input,
+.actions input {
+  width: 100%;
+}
+
+.actions {
+  margin-top: 10px;
+}
+
+.new_user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.new_user .field {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+}
+
+#remem {
+  flex-direction: row;
 }
