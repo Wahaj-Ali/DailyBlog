@@ -1,4 +1,5 @@
 class PostsController < ApplicationController
+  load_and_authorize_resource
   def index
     @user = User.find(params[:user_id])
     @posts = Post.where(author_id: params[:user_id])
@@ -9,6 +10,7 @@ class PostsController < ApplicationController
     @post = Post.includes(:author).find(params[:id])
     @comments = @post.comments
     @likes = @post.likes
+    authorize! :read, @post
   end
 
   def new
@@ -18,7 +20,7 @@ class PostsController < ApplicationController
 
   def create
     @user = current_user
-    @post = @user.posts.new(author: @user, title: params[:post][:title], text: params[:post][:text])
+    @post = @user.posts.new(post_params)
 
     if @post.save
       flash[:notice] = 'Your post has been created successfully'
@@ -41,5 +43,15 @@ class PostsController < ApplicationController
       flash[:error] = 'Failed to delete post.'
       redirect_to @post
     end
+  end
+
+  rescue_from CanCan::AccessDenied do | exception |
+    redirect_to root_url, alert: exception.message
+  end
+
+  private
+
+  def post_params
+    params.require(:post).permit(:title, :text)
   end
 end

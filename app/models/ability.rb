@@ -9,6 +9,8 @@ class Ability
     else
       can :destroy, Comment, author_id: user.id
       can :destroy, Post, author_id: user.id
+      can :read, :all
+      can :create, Post
     end
     # Define abilities for the user here. For example:
     #
