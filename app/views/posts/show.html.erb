@@ -13,6 +13,9 @@
     <% @post.comments.each do |comment| %>
       <li>
         <%= content_tag :span, "#{comment.author.name} : #{comment.text}" %>
+        <% if can? :destroy, comment %>
+          <%= button_to "Delete Comment", user_post_comment_path(comment.author, comment.post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: "delete_comment_btn" %>
+        <% end %>
       </li>
     <% end %>
   </ul>
