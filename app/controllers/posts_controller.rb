@@ -3,6 +3,7 @@ class PostsController < ApplicationController
   def index
     @user = User.find(params[:user_id])
     @posts = Post.where(author_id: params[:user_id])
+    render json: { data: { posts: @posts } }, status: :ok
   end
 
   def show
@@ -22,12 +23,21 @@ class PostsController < ApplicationController
     @user = current_user
     @post = @user.posts.new(post_params)
 
-    if @post.save
-      flash[:notice] = 'Your post has been created successfully'
-      redirect_to user_post_path(@user, @post)
-    else
-      flash.alert = 'Sorry, something went wrong!'
-      render :new
+    respond_to do |format|
+      if @post.save
+        format.html do
+          flash[:notice] = 'Your post has been created successfully'
+          redirect_to user_post_path(@user, @post)
+        end
+        format.json do
+          render json: @post
+        end
+      else
+        format.html do
+          flash.alert = 'Sorry, something went wrong!'
+          render :new
+        end
+      end
     end
   end
 
