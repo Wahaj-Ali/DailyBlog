@@ -1,4 +1,11 @@
 class CommentsController < ApplicationController
+  def index
+    user = User.find(params[:user_id])
+    post = user.post.(params[:post_id])
+    comments = post.comments
+    render json: comments
+  end
+
   def new
     @user = current_user
     @post = Post.find(params[:post_id])
@@ -9,9 +16,25 @@ class CommentsController < ApplicationController
     @user = current_user
     @post = Post.find(params[:post_id])
     @comment = @post.comments.new(author: @user, post: @post, text: params[:comment][:text])
-    @comment.save
-    redirect_to user_post_path(@post.author, @post)
+    # redirect_to user_post_path(@post.author, @post)
+    respond_to do |format|
+      if @comment.save
+        format.html do
+          redirect_to user_post_path(@post.author, @post)
+        end
+        format.json do
+          render json: {status: 'success', message: 'Comment created successfully', data: @comment }, status: created
+        end
+      else
+        format.html do
+          {render: new}
+        end
+        format.json do
+          render json: {status: 'error', message: 'Failed to create comment'}, status: unprocessable_entity
+        end
+      end
   end
+end
 
   def destroy
     @comment = Comment.find(params[:id])
