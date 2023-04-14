@@ -9,31 +9,38 @@ class CommentsController < ApplicationController
   def new
     @user = current_user
     @post = Post.find(params[:post_id])
-    @comment = Comment.new
+    @comment = Comment.new(author: @user, post: @post)
+    respond_to do |format|
+      format.html do
+        render :new
+      end
+      format.json do
+        render json: @comment
+      end
+    end
   end
 
   def create
     @user = current_user
     @post = Post.find(params[:post_id])
     @comment = @post.comments.new(author: @user, post: @post, text: params[:comment][:text])
-    # redirect_to user_post_path(@post.author, @post)
-    # respond_to do |format|
-    if @comment.save
-      format.html do
-        redirect_to user_post_path(@post.author, @post)
-      end
-      format.json do
-        render json: @comment
-      end
-    else
-      format.html do
-        { render: new }
-      end
-      format.json do
-        render error: { error: 'Unable to create comments' }, status: 400
+    respond_to do |format|
+      if @comment.save
+        format.html do
+          redirect_to user_post_path(@post.author, @post)
+        end
+        format.json do
+          render json: @comment
+        end
+      else
+        format.html do
+          { render: new }
+        end
+        format.json do
+          render error: { error: 'Unable to create comments' }, status: 400
+        end
       end
     end
-    # end
   end
 
   def destroy
