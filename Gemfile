@@ -81,3 +81,5 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'rspec-rails'
 end
+
+gem "active_model_serializers", "~> 0.10.13"
